@@ -17,7 +17,7 @@ public class CroniquitaInformationSource extends InformationSource {
     private ScheduledExecutorService executor;
 
     public CroniquitaInformationSource() {
-        this.httpClientService = new HttpClientService("http://localhost:8080/updates");
+        this.httpClientService = new HttpClientService("https://www.diariocronica.com.ar/rss/politica");
     }
 
     @Override

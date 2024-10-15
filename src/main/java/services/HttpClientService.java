@@ -19,6 +19,8 @@ public class HttpClientService {
         URL url = new URL(this.url);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
+        connection.setRequestProperty("User-Agent",
+                "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0");
 
         int responseCode = connection.getResponseCode();
         if (responseCode == 200) {
