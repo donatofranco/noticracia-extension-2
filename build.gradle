@@ -32,5 +32,4 @@ jar {
     exclude("module-info.class")
     exclude("META-INF/versions/**")
     exclude("noticracia/entities/**")
-    exclude("META-INF/services/noticracia.entities.InformationSource")
 }
