@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class CroniquitaInformationSource extends InformationSource {
 
@@ -28,7 +29,7 @@ public class CroniquitaInformationSource extends InformationSource {
                 try {
                     String response = httpClientService.getInformation();
 
-                    this.notify(this.mapInformation(response));
+                    this.notify(this.mapInformation(response, searchCriteria));
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
@@ -50,7 +51,24 @@ public class CroniquitaInformationSource extends InformationSource {
         return "Croniquita RSS";
     }
 
-    public Map<String, String> mapInformation(Object response) {
-        return new InformationMapper().mapInformation((String) response);
+    @Override
+    public Map<String, String> mapInformation(Object response, String searchCriteria) {
+        String[] words = searchCriteria.toLowerCase().split(" ");
+
+        return new InformationMapper().mapInformation((String) response).entrySet().stream()
+                //Le quito las informaciones que no traten de mi searchCriteria
+                .filter(e -> e.getValue().toLowerCase().contains(searchCriteria.toLowerCase()))
+                .collect(Collectors.toMap(
+                        //Le quito las apariciones del searchCriteria
+                        Map.Entry::getKey,
+                        e -> {
+                            String modifiedValue = e.getValue();
+                            for (String word : words) {
+                                modifiedValue = modifiedValue.replace(word, "");
+                            }
+                            return modifiedValue;
+                        }
+                ));
     }
+
 }
