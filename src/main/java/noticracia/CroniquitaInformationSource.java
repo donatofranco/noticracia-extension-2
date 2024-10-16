@@ -1,14 +1,13 @@
 package noticracia;
 
+import mappers.InformationMapper;
 import noticracia.entities.InformationSource;
 import services.HttpClientService;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class CroniquitaInformationSource extends InformationSource {
 
@@ -48,12 +47,10 @@ public class CroniquitaInformationSource extends InformationSource {
 
     @Override
     public String getName() {
-        return "Croniquita";
+        return "Croniquita RSS";
     }
 
     public Map<String, String> mapInformation(Object response) {
-        return  Arrays.stream(((String) response).split("<>"))
-                .map(pair -> pair.split("==="))
-                .collect(Collectors.toMap(parts -> parts[0].trim(), parts -> parts[1].trim()));
+        return new InformationMapper().mapInformation((String) response);
     }
 }
