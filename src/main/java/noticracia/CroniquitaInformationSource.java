@@ -15,7 +15,6 @@ public class CroniquitaInformationSource extends InformationSource {
     private boolean running = false;
     private final HttpClientService httpClientService;
     private ScheduledExecutorService executor;
-    private String searchCriteria;
 
     public CroniquitaInformationSource() {
         this.httpClientService = new HttpClientService("https://www.diariocronica.com.ar/rss/politica");
