@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.juanmanuellosada:noticracia-core:73032b248f'
+    implementation 'com.github.juanmanuellosada:noticracia-core:a539ac5388'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
     implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.18.0'
     testImplementation platform('org.junit:junit-bom:5.10.0')

@@ -15,6 +15,7 @@ public class CroniquitaInformationSource extends InformationSource {
     private boolean running = false;
     private final HttpClientService httpClientService;
     private ScheduledExecutorService executor;
+    private String searchCriteria;
 
     public CroniquitaInformationSource() {
         this.httpClientService = new HttpClientService("https://www.diariocronica.com.ar/rss/politica");
@@ -22,6 +23,7 @@ public class CroniquitaInformationSource extends InformationSource {
 
     @Override
     public void start(String searchCriteria) {
+        this.searchCriteria = searchCriteria;
         this.running = true;
         executor = Executors.newScheduledThreadPool(1);
         Runnable task = () -> {
@@ -29,7 +31,7 @@ public class CroniquitaInformationSource extends InformationSource {
                 try {
                     String response = httpClientService.getInformation();
 
-                    this.notify(this.mapInformation(response, searchCriteria));
+                    this.notify(this.mapInformation(response));
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
@@ -52,12 +54,12 @@ public class CroniquitaInformationSource extends InformationSource {
     }
 
     @Override
-    public Map<String, String> mapInformation(Object response, String searchCriteria) {
-        String[] words = searchCriteria.toLowerCase().split(" ");
+    public Map<String, String> mapInformation(Object response) {
+        String[] words = this.searchCriteria.toLowerCase().split(" ");
 
         return new InformationMapper().mapInformation((String) response).entrySet().stream()
                 //Le quito las informaciones que no traten de mi searchCriteria
-                .filter(e -> e.getValue().toLowerCase().contains(searchCriteria.toLowerCase()))
+                .filter(e -> e.getValue().toLowerCase().contains(this.searchCriteria.toLowerCase()))
                 .collect(Collectors.toMap(
                         //Le quito las apariciones del searchCriteria
                         Map.Entry::getKey,
